@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CalorieFlow - a simple, elegant calorie tracker with local storage persistence.">
+  <title>CalorieFlow — Daily Calorie Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-theme="dark">
+  <div class="ambient-glow glow-1" aria-hidden="true"></div>
+  <div class="ambient-glow glow-2" aria-hidden="true"></div>
+  <div class="ambient-glow glow-3" aria-hidden="true"></div>
+
+  <div class="app-container">
+    <header class="app-header">
+      <div class="header-brand">
+        <div class="logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2c1 3-1.5 4.5-1.5 7A3.5 3.5 0 0 0 14 12.5c0-1 .5-2 1.5-2.5.5 2 .5 4-1 6.5a5.5 5.5 0 0 1-9-6.5c1.5-2 3-3.5 3.5-6 .3-1.4.3-2.2 3-2z"></path>
+          </svg>
+        </div>
+        <div>
+          <h1 class="logo-title">CalorieFlow</h1>
+          <p class="logo-subtitle" id="date-display">Today</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="theme-toggle-btn" class="icon-btn" title="Toggle theme" aria-label="Toggle theme">
+          <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <svg class="sun-icon hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <section class="summary-card">
+      <div class="summary-main">
+        <div class="progress-ring-container">
+          <svg class="progress-ring" width="148" height="148" viewBox="0 0 148 148">
+            <circle class="progress-ring-track" cx="74" cy="74" r="64" />
+            <circle class="progress-ring-fill" id="progress-circle" cx="74" cy="74" r="64" />
+          </svg>
+          <div class="progress-center">
+            <span class="progress-value" id="remaining-value">0</span>
+            <span class="progress-label" id="remaining-label">remaining</span>
+          </div>
+        </div>
+
+        <div class="summary-stats">
+          <div class="summary-stat">
+            <span class="summary-stat-label">Goal</span>
+            <span class="summary-stat-value" id="goal-value">2000</span>
+            <span class="summary-stat-unit">kcal</span>
+          </div>
+          <div class="summary-stat">
+            <span class="summary-stat-label">Food</span>
+            <span class="summary-stat-value accent-food" id="consumed-value">0</span>
+            <span class="summary-stat-unit">kcal</span>
+          </div>
+          <div class="summary-stat">
+            <span class="summary-stat-label">Burned</span>
+            <span class="summary-stat-value accent-burn" id="burned-value">0</span>
+            <span class="summary-stat-unit">kcal</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="goal-row">
+        <label for="goal-input" class="goal-label">Daily goal</label>
+        <div class="goal-input-group">
+          <input type="number" id="goal-input" class="goal-input" min="500" max="10000" step="50" value="2000" aria-label="Daily calorie goal">
+          <span class="goal-unit">kcal</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="entry-form-section">
+      <form id="entry-form" class="entry-form" autocomplete="off">
+        <div class="entry-main-row">
+          <div class="input-field-wrapper grow">
+            <span class="input-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 2v7a3 3 0 0 0 6 0V2"></path>
+                <path d="M6 2v20"></path>
+                <path d="M17 2c-1.5 1-2 3-2 5s.5 4 2 5v10"></path>
+                <path d="M21 2v20"></path>
+              </svg>
+            </span>
+            <input type="text" id="food-name-input" placeholder="What did you eat?" maxlength="60" required aria-label="Food name">
+          </div>
+          <div class="input-field-wrapper cal-field">
+            <input type="number" id="food-calories-input" class="cal-input" placeholder="0" min="0" max="10000" required aria-label="Calories">
+            <span class="input-suffix">kcal</span>
+          </div>
+          <button type="submit" class="primary-btn">
+            <span>Add</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="entry-options-row">
+          <div class="option-group">
+            <label for="meal-select" class="option-label">Meal</label>
+            <select id="meal-select" class="select-input">
+              <option value="breakfast">🍳 Breakfast</option>
+              <option value="lunch" selected>🥗 Lunch</option>
+              <option value="dinner">🍽️ Dinner</option>
+              <option value="snack">🍎 Snack</option>
+            </select>
+          </div>
+          <div class="option-group">
+            <label for="type-select" class="option-label">Type</label>
+            <select id="type-select" class="select-input">
+              <option value="food" selected>🍽️ Food</option>
+              <option value="burned">🔥 Exercise</option>
+            </select>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <main class="entries-section">
+      <div class="entries-header">
+        <h3 class="entries-title">Today's Entries</h3>
+        <button id="clear-all-btn" class="text-danger-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          <span>Clear All</span>
+        </button>
+      </div>
+
+      <div id="entries-list" class="entries-list">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <div id="empty-state" class="empty-state hidden">
+        <div class="empty-state-art">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 2v7a3 3 0 0 0 6 0V2"></path>
+            <path d="M6 2v20"></path>
+            <path d="M17 2c-1.5 1-2 3-2 5s.5 4 2 5v10"></path>
+            <path d="M21 2v20"></path>
+          </svg>
+        </div>
+        <h4 class="empty-title">Nothing logged yet</h4>
+        <p class="empty-desc">Add your first meal or workout above to start tracking today.</p>
+      </div>
+    </main>
+
+    <footer class="app-footer">
+      <span class="storage-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+        </svg>
+        Saved locally on this device
+      </span>
+    </footer>
+  </div>
+
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
